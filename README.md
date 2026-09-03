@@ -1,5 +1,5 @@
 # ELS_Quick_Setup
-A quick start app for the digital electrolytic sensors line (D801, D711, MD900, D500).
+A quick start app for the digital electrolytic sensors line (D801, D711, MD900, D500 (Lily)).
 
 ## About
 Author: Lucas Jameson
@@ -17,6 +17,7 @@ At this point, one can use the "Command" box to send command to the sensor. The 
 
 
 ## Commands
+All commands start with a *9900. 
 + XY - Outputs a single tilt and temperature measurement. The format of the output depends on the setting of the SO command.
 + SO-xxx -  Selects the output format for the XY command. “xxx” selects format as follows:
     - ASH: Ashtech compatible NMEA format
@@ -65,3 +66,15 @@ At this point, one can use the "Command" box to send command to the sensor. The 
 + XY-SET-HYST,k - Sets the control hysteresis.
 + XY-DUMP-SETTINGS - Dumps settings of device.
 + XY-DUMP2 - Dumps extended settings of device
+## D500 (Lily) Specific Commands
++ XY-LEVEL,x - Starts sensor leveling procedure when x = 1 and stops leveling when x = 0
++ XY-SET-MAG,x Adds compass heading to Simple (SIM) output string when x = 1 and removes it when x = 0. This command works only when the tiltmeter output is set to the Simple (SIM) output string.
++ XY-TOGGLE-SUPPLYVOLTAGE - Appends a supply voltage reading to the Simple (SIM) output string when toggled on.
++ XY-TOGGLE-TIMESTAMP - Appends a timestamp to the Simple (SIM) output string when toggled on.
++ SET-TIME,sec,min,hour,day,month,year - Sets the current Lily time to a specific time. Each input must be two characters long:
+  - sec 00-59
+  - min 00-59
+  - hour 00-23
+  - day 00-31
+  - month 00-12
+  - year 00-99

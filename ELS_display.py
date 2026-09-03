@@ -205,7 +205,7 @@ class JDx_Display_Window(QtWidgets.QMainWindow):
             x_data = float(data[0])
             y_data = float(data[1])
             temp = float(data[2])
-            compass = 0
+            compass = 0 if self.model_no == "iris" else float(data[2])
         except Exception as e:
             # self.message_te.append(e)
             print(e)
@@ -236,8 +236,33 @@ class JDx_Display_Window(QtWidgets.QMainWindow):
 
         self.sensor = open_serial_connection(port, baud, parity=parity)
 
+        if self.get_model() == "lily":
+            self.setup_D500_sensor()
+
         self.message_te.append("Connected!")
         self.connected_to_sensor = True
+
+    def get_model(self):
+        """get the model number for the sensor connected.
+
+        Returns:
+            _type_: _description_
+        """
+        self.model_no = "iris"
+        send_serial_data(self.sensor, "*9900XYVR\r\n")
+        data = read_serial_data(self.sensor)
+        if "IRIS" in data:
+            self.model_no = "iris"
+        elif "LILY" in data:
+            self.model_no = "lily"
+        else:
+            self.message_te.append(f"Could not identify the model number. {data}")
+
+    def setup_D500_sensor(self):
+        send_serial_data(self.sensor, "*9900XY-SET-MAG, 1\r\n")
+        _ = read_serial_data(self.sensor)
+
+        return
 
     def send_command(self):
         if self.connected_to_sensor is True:
